@@ -33,7 +33,7 @@ pipeline {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials-id']]) {
                     sh '''
                     . myenv/bin/activate
-                    ansible-playbook -i /opt/aws_ec2.yml tomcat/tests/test.yml --check
+                    ansible-playbook -i /opt/aws_ec2.yml tomcat/tests/test.yml --check -e ansible_python_interpreter=/var/lib/jenkins/workspace/tom/myenv/bin/python
                     '''
                 }
             }
@@ -48,10 +48,11 @@ pipeline {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials-id']]) {
                     sh '''
                     . myenv/bin/activate
-                    ansible-playbook -i /opt/aws_ec2.yml tomcat/tests/test.yml
+                    ansible-playbook -i /opt/aws_ec2.yml tomcat/tests/test.yml -e ansible_python_interpreter=/var/lib/jenkins/workspace/tom/myenv/bin/python
                     '''
                 }
             }
         }
     }
 }
+
