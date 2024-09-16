@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        SSH_KEY = credentials('ubuntu')
+    }
+
     stages {
         stage('Git Checkout') {
             steps {
