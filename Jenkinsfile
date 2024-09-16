@@ -16,7 +16,7 @@ pipeline {
         stage('Verify Files') {
             steps {
                 // List files in the workspace to verify paths
-                sh 'ls -l /var/lib/jenkins/workspace/tom'
+                sh 'ls -R /var/lib/jenkins/workspace/tom'
             }
         }
 
