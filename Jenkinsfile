@@ -5,9 +5,7 @@ pipeline {
         stage('Git Checkout') {
             steps {
                 // Checkout the code from your Git repository
-                git url: 'https://github.com/Priyanshu498/Final-tomcat.git'
-               
-                
+                git branch: 'main', url: 'https://github.com/Priyanshu498/Final-tomcat.git'
             }
         }
 
@@ -38,3 +36,4 @@ pipeline {
         }
     }
 }
+
