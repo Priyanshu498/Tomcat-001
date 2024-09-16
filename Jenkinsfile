@@ -14,7 +14,7 @@ pipeline {
                 // Use SSH credentials to run the dry run of the Ansible playbook
                 withCredentials([sshUserPrivateKey(credentialsId: 'ubuntu', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                     sh '''
-                    ansible-playbook -i tomcat/assignmet_0n_tool/tomcat/tests/inventory tomcat/assignmet_0n_tool/tomcat/tests/test.yml --check
+                    ansible-playbook -i Final-tomcat/tomcat/tests/inventory Final-tomcat/tomcat/tests/test.yml --check
                     '''
                 }
             }
@@ -29,7 +29,7 @@ pipeline {
                 // Use SSH credentials to run the Ansible playbook
                 withCredentials([sshUserPrivateKey(credentialsId: 'ubuntu', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                     sh '''
-                    ansible-playbook -i tomcat/assignmet_0n_tool/tomcat/tests/inventory tomcat/assignmet_0n_tool/tomcat/tests/test.yml
+                    ansible-playbook -i Final-tomcat/tomcat/tests/inventory Final-tomcat/tomcat/tests/test.yml
                     '''
                 }
             }
