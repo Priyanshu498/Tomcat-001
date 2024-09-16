@@ -9,6 +9,13 @@ pipeline {
             }
         }
 
+        stage('List Files') {
+            steps {
+                // List files in the repository to verify the checkout
+                sh 'ls -R'
+            }
+        }
+
         stage('Dryrun Playbook') {
             steps {
                 // Use SSH credentials to run the dry run of the Ansible playbook
@@ -36,4 +43,3 @@ pipeline {
         }
     }
 }
-
