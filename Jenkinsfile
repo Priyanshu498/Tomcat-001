@@ -12,9 +12,15 @@ pipeline {
             }
         }
 
-        stage('List Files') {
+        
+
+        stage('Setup Virtual Environment') {
             steps {
-                sh 'ls -R'
+                sh '''
+                python3 -m venv myenv
+                source myenv/bin/activate
+                pip install boto3 botocore
+                '''
             }
         }
 
@@ -22,6 +28,7 @@ pipeline {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials-id']]) {
                     sh '''
+                    source myenv/bin/activate
                     ansible-playbook -i /opt/aws_ec2.yml tomcat/tests/test.yml --check
                     '''
                 }
@@ -36,6 +43,7 @@ pipeline {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials-id']]) {
                     sh '''
+                    source myenv/bin/activate
                     ansible-playbook -i /opt/aws_ec2.yml tomcat/tests/test.yml
                     '''
                 }
@@ -43,5 +51,3 @@ pipeline {
         }
     }
 }
-
-
