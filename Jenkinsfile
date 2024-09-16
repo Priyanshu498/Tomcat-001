@@ -2,48 +2,52 @@ pipeline {
     agent any
 
     environment {
-        SSH_KEY = credentials('ubuntu')
+        // Define environment variables if needed
     }
 
     stages {
-        stage('Git Checkout') {
+        stage('Checkout SCM') {
             steps {
-                // Checkout the code from your Git repository
-                git branch: 'main', url: 'https://github.com/Priyanshu498/Final-tomcat.git'
+                // Checkout the source code from Git
+                git 'https://github.com/Priyanshu498/Final-tomcat.git'
             }
         }
 
         stage('List Files') {
             steps {
-                // List files in the repository to verify the checkout
+                // List files in the workspace
                 sh 'ls -R'
             }
         }
 
         stage('Dryrun Playbook') {
             steps {
-                // Use SSH credentials to run the dry run of the Ansible playbook
-                withCredentials([sshUserPrivateKey(credentialsId: 'ubuntu', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                // Use SSH credentials for Ansible playbook execution
+                withCredentials([sshUserPrivateKey(credentialsId: 'ansible-ssh-key', keyFileVariable: 'SSH_KEY')]) {
                     sh '''
-                    ansible-playbook -i tomcat/tests/inventory tomcat/tests/test.yml --check
+                        ansible-playbook -i tomcat/tests/inventory tomcat/tests/test.yml --check
                     '''
                 }
             }
         }
 
         stage('Execute Playbook') {
-            input {
-                message "Do you want to perform apply?"
-                ok "Yes"
-            }
             steps {
-                // Use SSH credentials to run the Ansible playbook
-                withCredentials([sshUserPrivateKey(credentialsId: 'ubuntu', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                // Execute the Ansible playbook
+                withCredentials([sshUserPrivateKey(credentialsId: 'ansible-ssh-key', keyFileVariable: 'SSH_KEY')]) {
                     sh '''
-                    ansible-playbook -i tomcat/tests/inventory tomcat/tests/test.yml
+                        ansible-playbook -i tomcat/tests/inventory tomcat/tests/test.yml
                     '''
                 }
             }
         }
     }
+
+    post {
+        always {
+            // Actions to perform after the pipeline finishes
+            cleanWs()
+        }
+    }
 }
+
