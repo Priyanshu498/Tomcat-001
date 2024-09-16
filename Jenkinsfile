@@ -13,24 +13,13 @@ pipeline {
             }
         }
 
-        
-        stage('Setup Virtual Environment') {
-            steps {
-                // Create a Python virtual environment and install dependencies
-                sh '''
-                python3 -m venv myenv
-                . myenv/bin/activate
-                pip install boto3 botocore  # Install required AWS libraries
-                '''
-            }
-        }
 
         stage('Dry Run Playbook') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials-id']]) {
                     // Perform a dry run (check mode) of the Ansible playbook
                     sh '''
-                    . myenv/bin/activate
+                    
                     ansible-playbook -i /opt/aws_ec2.yml tomcat/tests/test.yml -e ansible_python_interpreter=/var/lib/jenkins/workspace/tom/myenv/bin/python
 
                     '''
@@ -48,9 +37,7 @@ pipeline {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials-id']]) {
                     // Execute the Ansible playbook without check mode
                     sh '''
-                    . myenv/bin/activate
-                   ansible-playbook -i /opt/aws_ec2.yml tomcat/tests/test.yml -e ansible_python_interpreter=/var/lib/jenkins/workspace/tom/myenv/bin/python
-
+                   ansible-playbook -i /opt/aws_ec2.yml tomcat/tests/test.yml 
                     '''
                 }
             }
