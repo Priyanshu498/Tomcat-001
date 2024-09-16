@@ -3,7 +3,8 @@
   hosts: web
   become: yes
   roles:
-    - role: /home/ubuntu/Final-tomcat/tomcat
+    - role: tomcat
       tomcat_group: "tomcat"
       tomcat_user: "tomcat"
+
 
