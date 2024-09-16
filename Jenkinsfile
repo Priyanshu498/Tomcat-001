@@ -2,31 +2,30 @@ pipeline {
     agent any
 
     environment {
-        // Set environment variable for SSH key using Jenkins credentials
+        // Jenkins credentials ID for AWS access
+        AWS_CREDENTIALS = credentials('aws-credentials-id')
         SSH_KEY = credentials('ansible-ssh-key')
     }
 
     stages {
         stage('Git Checkout') {
             steps {
-                // Checkout the code from your Git repository
                 git branch: 'main', url: 'https://github.com/Priyanshu498/Final-tomcat.git'
             }
         }
 
         stage('List Files') {
             steps {
-                // List files in the repository to verify the checkout
                 sh 'ls -R'
             }
         }
 
         stage('Dryrun Playbook') {
             steps {
-                // Use SSH credentials to run the dry run of the Ansible playbook
-                withCredentials([sshUserPrivateKey(credentialsId: 'ansible-ssh-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                withCredentials([file(credentialsId: 'aws-credentials-id', variable: 'AWS_CREDENTIALS_FILE'), 
+                                 sshUserPrivateKey(credentialsId: 'ansible-ssh-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                     sh '''
-                    ansible-playbook -i tomcat/tests/inventory tomcat/tests/test.yml --check
+                    ansible-playbook -i /opt/aws_ec2.yml tomcat/tests/test.yml --check --private-key=$SSH_PRIVATE_KEY
                     '''
                 }
             }
@@ -38,23 +37,13 @@ pipeline {
                 ok "Yes"
             }
             steps {
-                // Use SSH credentials to run the Ansible playbook
-                withCredentials([sshUserPrivateKey(credentialsId: 'ansible-ssh-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                withCredentials([file(credentialsId: 'aws-credentials-id', variable: 'AWS_CREDENTIALS_FILE'), 
+                                 sshUserPrivateKey(credentialsId: 'ansible-ssh-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                     sh '''
-                    ansible-playbook -i tomcat/tests/inventory tomcat/tests/test.yml
+                    ansible-playbook -i /opt/aws_ec2.yml tomcat/tests/test.yml --private-key=$SSH_PRIVATE_KEY
                     '''
                 }
             }
         }
     }
-
-    post {
-        always {
-            // Clean up workspace after the pipeline finishes
-            cleanWs()
-        }
-    }
 }
-
-
-
