@@ -13,12 +13,28 @@ pipeline {
             }
         }
 
+        stage('Verify Files') {
+            steps {
+                // List files in the workspace to verify paths
+                sh 'ls -l /var/lib/jenkins/workspace/tom'
+            }
+        }
+
         stage('Setup Virtual Environment') {
             steps {
                 // Create and activate the virtual environment
                 sh '''
                 python3 -m venv /var/lib/jenkins/workspace/tom/myenv
-                bash -c "source /var/lib/jenkins/workspace/tom/myenv/bin/activate && pip install --upgrade pip && pip install -r /var/lib/jenkins/workspace/tom/requirements.txt"
+                bash -c "source /var/lib/jenkins/workspace/tom/myenv/bin/activate && pip install --upgrade pip"
+                '''
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                // Install dependencies from requirements.txt
+                sh '''
+                bash -c "source /var/lib/jenkins/workspace/tom/myenv/bin/activate && pip install -r /var/lib/jenkins/workspace/tom/requirements.txt"
                 '''
             }
         }
