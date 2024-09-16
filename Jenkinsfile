@@ -13,13 +13,7 @@ pipeline {
             }
         }
 
-        stage('List Files') {
-            steps {
-                // List all files recursively to verify the structure
-                sh 'ls -R'
-            }
-        }
-
+        
         stage('Setup Virtual Environment') {
             steps {
                 // Create a Python virtual environment and install dependencies
@@ -37,8 +31,8 @@ pipeline {
                     // Perform a dry run (check mode) of the Ansible playbook
                     sh '''
                     . myenv/bin/activate
-                    ansible-playbook -i /opt/aws_ec2.yml tomcat/tests/test.yml --check \
-                    -e ansible_python_interpreter=/var/lib/jenkins/workspace/tom/myenv/bin/python
+                    ansible-playbook -i /opt/aws_ec2.yml tomcat/tests/test.yml -e ansible_python_interpreter=/var/lib/jenkins/workspace/tom/myenv/bin/python
+
                     '''
                 }
             }
@@ -55,8 +49,8 @@ pipeline {
                     // Execute the Ansible playbook without check mode
                     sh '''
                     . myenv/bin/activate
-                    ansible-playbook -i /opt/aws_ec2.yml tomcat/tests/test.yml \
-                    -e ansible_python_interpreter=/var/lib/jenkins/workspace/tom/myenv/bin/python
+                   ansible-playbook -i /opt/aws_ec2.yml tomcat/tests/test.yml -e ansible_python_interpreter=/var/lib/jenkins/workspace/tom/myenv/bin/python
+
                     '''
                 }
             }
