@@ -3,7 +3,7 @@ pipeline {
    
     environment {
         //TERRAFORM_WORKSPACE = "/var/lib/jenkins/workspace/tool_deploy/prometheus_infra/"
-        INSTALL_WORKSPACE = "/var/lib/jenkins/workspace/tomcat-deploy/assignmet_0n_tool/tomcat/"
+        INSTALL_WORKSPACE = "/var/lib/jenkins/workspace/tomcat-deploy/tomcat/"
     }
     stages {
         stage('Clone Repository') {
@@ -18,7 +18,7 @@ pipeline {
             }
             steps {
                 // Deploy Prometheus
-                sh '''cd /var/lib/jenkins/workspace/tomcat-deploy/assignmet_0n_tool/tomcat/
+                sh '''cd /var/lib/jenkins/workspace/tomcat-deploy/tomcat/
                 ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook playbook.yml    '''
             }
         }
