@@ -2,39 +2,35 @@ pipeline {
     agent any
 
     environment {
-        AWS_CREDENTIALS = credentials('aws-credentials-id') // Ensure this ID matches your Jenkins credentials ID
+        AWS_CREDENTIALS = credentials('aws-credentials-id') 
     }
 
     stages {
         stage('Git Checkout') {
-            steps {
-                // Checkout the latest code from the 'main' branch
+            steps {      
                 git branch: 'main', url: 'https://github.com/Priyanshu498/Final-tomcat.git'
             }
         }
 
         stage('Dry Run Playbook') {
             steps {
-                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials-id']]) {
-                    // Perform a dry run (check mode) of the Ansible playbook
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials-id']]) {         
                     sh '''
-                    ansible-playbook -i /opt/aws_ec2.yml tomcat/tests/test.yml --private-key /home/ubuntu/tom-1-key.pem -e ansible_python_interpreter=/usr/bin/python3 --check
+                    ansible-playbook -i /opt/aws_ec2.yml tomcat/tests/test.yml  -e ansible_python_interpreter=/usr/bin/python3 --check
                     '''
                 }
             }
         }
 
         stage('Execute Playbook') {
-            input {
-                // Prompt for manual approval before proceeding with the actual execution
+            input {              
                 message "Do you want to perform apply?"
                 ok "Yes"
             }
             steps {
-                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials-id']]) {
-                    // Execute the Ansible playbook without check mode
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials-id']]) {              
                     sh '''
-                    ansible-playbook -i /opt/aws_ec2.yml tomcat/tests/test.yml --private-key /home/ubuntu/tom-1-key.pem -e ansible_python_interpreter=/usr/bin/python3
+                    ansible-playbook -i /opt/aws_ec2.yml tomcat/tests/test.yml  -e ansible_python_interpreter=/usr/bin/python3
                     '''
                 }
             }
