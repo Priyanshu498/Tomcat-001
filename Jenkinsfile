@@ -18,7 +18,7 @@ pipeline {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials-id']]) {
                     // Perform a dry run (check mode) of the Ansible playbook
                     sh '''
-                    ansible-playbook -i /opt/aws_ec2.yml Final-tomcat/tomcat/tests/test.yml --private-key /home/ubuntu/tom-1-key.pem -e ansible_python_interpreter=/var/lib/jenkins/workspace/tom/myenv/bin/python --check
+                    ansible-playbook -i /opt/aws_ec2.yml /tomcat/tests/test.yml --private-key /home/ubuntu/tom-1-key.pem -e ansible_python_interpreter=/var/lib/jenkins/workspace/tom/myenv/bin/python --check
                     '''
                 }
             }
@@ -34,7 +34,7 @@ pipeline {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials-id']]) {
                     // Execute the Ansible playbook without check mode
                     sh '''
-                    ansible-playbook -i /opt/aws_ec2.yml Final-tomcat/tomcat/tests/test.yml --private-key /home/ubuntu/tom-1-key.pem
+                    ansible-playbook -i /opt/aws_ec2.yml /tomcat/tests/test.yml --private-key /home/ubuntu/tom-1-key.pem
                     '''
                 }
             }
