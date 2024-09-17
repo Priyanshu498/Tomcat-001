@@ -1,52 +1,36 @@
 pipeline {
     agent any
-    parameters {
-        choice(name: 'ACTION', choices: ['roles'], description: 'Select action: roles')
-    }
+   
     environment {
-        SSH_KEY = credentials('ssh-credentials-id') // Updated Jenkins credentials for SSH key
+        //TERRAFORM_WORKSPACE = "/var/lib/jenkins/workspace/tool_deploy/prometheus_infra/"
+        INSTALL_WORKSPACE = "/var/lib/jenkins/workspace/tool_deploy/prometheus_role/"
     }
     stages {
         stage('Clone Repository') {
             steps {
-                git branch: 'main', url: 'https://github.com/Priyanshu498/Final-tomcat.git'
+                git branch: 'main', url: ''
             }
         }
-        stage('List Files') {
-            steps {
-                sh 'ls -R'
-            }
-        }
-        stage('Dryrun Playbook') {
+        
+        stage('Tool Deploy') {
             when {
-                expression { params.ACTION == 'roles' }
+                expression { params.ACTION == 'apply' }
             }
             steps {
-                withCredentials([sshUserPrivateKey(credentialsId: 'ssh-credentials-id', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
-                    sh '''
-                    ansible-playbook -i /opt/aws_ec2.yml tomcat/tests/test.yml --check
-                    '''
-                }
-            }
-        }
-        stage('Execute Playbook') {
-            when {
-                expression { params.ACTION == 'roles' }
-            }
-            steps {
-                withCredentials([sshUserPrivateKey(credentialsId: 'ssh-credentials-id', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
-                    sh '''
-                     ansible-playbook -i /opt/aws_ec2.yml tomcat/tests/test.yml
-                    '''
-                }
+                // Deploy Prometheus
+                sh '''cd /var/lib/jenkins/workspace/tool_deploy/prometheus_role/
+                ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook playbook.yml    '''
             }
         }
     }
     post {
-        always {
-            node('any') {
-                cleanWs()
-            }
+        success {
+            // Actions to take if the pipeline is successful
+            echo 'Succeeded!'
+        }
+        failure {
+            // Actions to take if the pipeline fails
+            echo 'Failed!'
         }
     }
 }
