@@ -1,5 +1,5 @@
 ---
-- name: Test Tomcat role
+- name: Tomcat role
   hosts: aws_ec2
   become: yes
   roles:
