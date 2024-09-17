@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git branch: 'main', url: ''
+                git branch: 'main', url: 'https://github.com/Priyanshu498/Final-tomcat.git'
             }
         }
         
@@ -18,7 +18,7 @@ pipeline {
             }
             steps {
                 // Deploy Prometheus
-                sh '''cd /var/lib/jenkins/workspace/tool_deploy/prometheus_role/
+                sh '''cd /var/lib/jenkins/workspace/tomcat-deploy/assignmet_0n_tool/tomcat/
                 ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook playbook.yml    '''
             }
         }
