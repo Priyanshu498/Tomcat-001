@@ -4,7 +4,7 @@ pipeline {
         choice(name: 'ACTION', choices: ['roles'], description: 'Select action: roles')
     }
     environment {
-        SSH_KEY = credentials('aws-credentials-id') // Jenkins credentials for SSH key
+        SSH_KEY = credentials('ssh-credentials-id') // Updated Jenkins credentials for SSH key
     }
     stages {
         stage('Clone Repository') {
@@ -22,7 +22,7 @@ pipeline {
                 expression { params.ACTION == 'roles' }
             }
             steps {
-                withCredentials([sshUserPrivateKey(credentialsId: 'aws-credentials-id', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                withCredentials([sshUserPrivateKey(credentialsId: 'ssh-credentials-id', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                     sh '''
                     ansible-playbook -i /opt/aws_ec2.yml tomcat/tests/test.yml --check
                     '''
@@ -34,7 +34,7 @@ pipeline {
                 expression { params.ACTION == 'roles' }
             }
             steps {
-                withCredentials([sshUserPrivateKey(credentialsId: 'aws-credentials-id', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                withCredentials([sshUserPrivateKey(credentialsId: 'ssh-credentials-id', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                     sh '''
                      ansible-playbook -i /opt/aws_ec2.yml tomcat/tests/test.yml
                     '''
@@ -48,3 +48,4 @@ pipeline {
         }
     }
 }
+
