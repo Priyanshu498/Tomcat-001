@@ -1,51 +1,50 @@
 pipeline {
     agent any
-
-    environment {
-        AWS_CREDENTIALS = credentials('aws-credentials-id') 
+    parameters {
+        choice(name: 'ACTION', choices: ['roles'], description: 'Select action: roles')
     }
-
+    environment {
+        SSH_KEY = credentials('ansible-ssh-key') // Jenkins credentials for SSH key
+    }
     stages {
-        stage('Git Checkout') {
-            steps {      
+        stage('Clone Repository') {
+            steps {
                 git branch: 'main', url: 'https://github.com/Priyanshu498/Final-tomcat.git'
             }
         }
-
-        stage('Dry Run Playbook') {
+        stage('List Files') {
             steps {
-                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials-id']]) {         
+                sh 'ls -R'
+            }
+        }
+        stage('Dryrun Playbook') {
+            when {
+                expression { params.ACTION == 'roles' }
+            }
+            steps {
+                withCredentials([sshUserPrivateKey(credentialsId: 'ansible-ssh-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                     sh '''
-                    ansible-playbook -i /opt/aws_ec2.yml tomcat/tests/test.yml  -e ansible_python_interpreter=/usr/bin/python3 --check
+                    ansible-playbook -i tomcat/tests/inventory tomcat/tests/test.yml --check
                     '''
                 }
             }
         }
-
         stage('Execute Playbook') {
-            input {              
-                message "Do you want to perform apply?"
-                ok "Yes"
+            when {
+                expression { params.ACTION == 'roles' }
             }
             steps {
-                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials-id']]) {              
+                withCredentials([sshUserPrivateKey(credentialsId: 'ansible-ssh-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                     sh '''
-                    ansible-playbook -i /opt/aws_ec2.yml tomcat/tests/test.yml  -e ansible_python_interpreter=/usr/bin/python3
+                    ansible-playbook -i tomcat/tests/inventory tomcat/tests/test.yml
                     '''
                 }
             }
         }
     }
-
     post {
-        success {
-            // Notify success
-            echo 'Playbook executed successfully.'
-        }
-        failure {
-            // Notify failure
-            echo 'Playbook execution failed.'
+        always {
+            cleanWs()
         }
     }
 }
-
