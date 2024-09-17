@@ -24,7 +24,7 @@ pipeline {
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: 'aws-credentials-id', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                     sh '''
-                    ansible-playbook -i tomcat/tests/inventory tomcat/tests/test.yml --check
+                    ansible-playbook -i /opt/aws_ec2.yml tomcat/tests/test.yml --check
                     '''
                 }
             }
@@ -36,7 +36,7 @@ pipeline {
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: 'aws-credentials-id', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                     sh '''
-                    ansible-playbook -i tomcat/tests/inventory tomcat/tests/test.yml
+                     ansible-playbook -i /opt/aws_ec2.yml tomcat/tests/test.yml
                     '''
                 }
             }
