@@ -3,7 +3,7 @@ pipeline {
    
     environment {
         //TERRAFORM_WORKSPACE = "/var/lib/jenkins/workspace/tool_deploy/prometheus_infra/"
-        INSTALL_WORKSPACE = "/var/lib/jenkins/workspace/tool_deploy/prometheus_role/"
+        INSTALL_WORKSPACE = "/var/lib/jenkins/workspace/tomcat-deploy/assignmet_0n_tool/tomcat/"
     }
     stages {
         stage('Clone Repository') {
