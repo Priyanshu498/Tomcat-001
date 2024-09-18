@@ -76,8 +76,10 @@ pipeline {
                 expression { params.ACTION == 'apply' && currentBuild.result == 'SUCCESS' }
             }
             steps {
-                sh '''cd /var/lib/jenkins/workspace/tool_deploy/tomcat/
-                ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook playbook.yml'''
+                script {
+                    sh '''cd ${env.INSTALL_WORKSPACE}
+                    ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook playbook.yml'''
+                }
             }
         }
 
@@ -95,12 +97,22 @@ pipeline {
                 expression { params.ACTION == 'destroy' && currentBuild.result == 'SUCCESS' }
             }
             steps {
-                sh "cd ${env.TERRAFORM_WORKSPACE} && terraform destroy -auto-approve"
+                script {
+                    try {
+                        sh "cd ${env.TERRAFORM_WORKSPACE} && terraform destroy -auto-approve"
+                    } catch (Exception e) {
+                        error "Terraform Destroy failed: ${e}"
+                    }
+                }
             }
         }
     }
 
     post {
+        always {
+            echo 'Cleaning up temporary files and states...'
+            // Add any cleanup steps here if needed
+        }
         success {
             echo 'Succeeded!'
         }
@@ -109,4 +121,5 @@ pipeline {
         }
     }
 }
+
 
