@@ -97,6 +97,5 @@ module "alb" {
 module "s3" {
   source      = "./modules/s3"
   bucket_name = "my-tomcat-test-bucket-45-ninja"
-  region = "us-east-1"
 }
 
