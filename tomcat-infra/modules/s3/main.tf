@@ -1,7 +1,5 @@
 resource "aws_s3_bucket" "my_bucket" {
   bucket = var.bucket_name
-    acl    = "private"
-  region = "us-east-1"
 
   tags = {
     Name        = "My bucket"
