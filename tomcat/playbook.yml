@@ -1,6 +1,6 @@
 ---
 - name: Tomcat role
-  hosts: web
+  hosts: aws_ec2
   become: yes
   roles:
     - role: tomcat
