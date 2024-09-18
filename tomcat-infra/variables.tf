@@ -20,7 +20,7 @@ variable "private_subnet_cidrs" {
 
 variable "availability_zones" {
   type    = list(string)
-  default = ["us-east-1a", "us-east-1b", "us-east-1c"]
+  default = ["us-east-1a", "us-east-1b"]
 }
 
 # Tags for Resources
