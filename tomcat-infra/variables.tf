@@ -31,7 +31,7 @@ variable "tags" {
 
 # EC2 Instance Configuration
 variable "ami_id" {
-  default = "ami-04a92520784b93e73"
+  default = "ami-0e86e20dae9224db8"
 }
 
 variable "instance_type" {
