@@ -96,5 +96,5 @@ module "alb" {
 # S3 Bucket Module
 module "s3" {
   source      = "./modules/s3"
-  bucket_name = "my-tomcat-test-bucket-19-ninja"
+  bucket_name = "my-tomcat-test-bucket-45-ninja"
 }
