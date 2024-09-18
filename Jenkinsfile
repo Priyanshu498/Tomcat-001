@@ -4,13 +4,13 @@ pipeline {
         choice(name: 'ACTION', choices: ['apply', 'destroy'], description: 'Select action: apply or destroy')
     }
     environment {
-        TERRAFORM_WORKSPACE = "/var/lib/jenkins/workspace/tool_deploy/prometheus_infra/"
-        INSTALL_WORKSPACE = "/var/lib/jenkins/workspace/tool_deploy/prometheus_role/"
+        TERRAFORM_WORKSPACE = "/var/lib/jenkins/workspace/tool_deploy/tomcat-infra/"
+        INSTALL_WORKSPACE = "/var/lib/jenkins/workspace/tool_deploy/tomcat/"
     }
     stages {
         stage('Clone Repository') {
             steps {
-                git branch: 'main', url: 'https://github.com/c-shantanu/monitoring_automation.git'
+                git branch: 'main', url: 'https://github.com/Priyanshu498/Final-tomcat.git'
             }
         } 
         stage('Terraform Init') {
@@ -77,7 +77,7 @@ pipeline {
             }
             steps {
                 // Deploy logstash
-                sh '''cd /var/lib/jenkins/workspace/tool_deploy/prometheus_role/
+                sh '''cd /var/lib/jenkins/workspace/tool_deploy/tomcat/
                 ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook playbook.yml    '''
             }
         }
