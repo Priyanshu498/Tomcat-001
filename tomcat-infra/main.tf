@@ -70,8 +70,8 @@ module "instance" {
 
 
 # Auto Scaling Group Module
-module "auto-scaling" {
-  source            = "./modules/auto-scaling"
+module "auto_scaling" {
+  source            = "./modules/auto_scaling"
   ami_id            = var.ami_id
   instance_type     = var.instance_type
   key_name          = var.key_name
