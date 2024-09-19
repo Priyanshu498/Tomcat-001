@@ -3,6 +3,6 @@
   hosts: all
   become: yes
   roles:
-    - role: tomcat
+    - role: tomcat_role/tomcat
       tomcat_group: "tomcat"
       tomcat_user: "tomcat"
