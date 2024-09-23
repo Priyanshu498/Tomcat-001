@@ -83,7 +83,8 @@ pipeline {
                         '''
                     }
                 }
-            }
+            } // Added this closing brace
+        } // Closing brace for Tool Deploy stage
 
         stage('Approval for Destroy') {
             when {
