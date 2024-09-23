@@ -76,9 +76,11 @@ pipeline {
                 expression { params.ACTION == 'apply' && currentBuild.result == 'SUCCESS' }
             }
             steps {
-                script {
-                    sh '''cd ${env.INSTALL_WORKSPACE}
-                    ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook playbook.yml'''
+                sshagent(['tom-1-key.pem']) {
+                    script {
+                        sh ''' 
+                        ansible-playbook -i ./tomcat-Role/tomcat/aws_ec2.yml ./tomcat-Role/tomcat/playbook.yml
+                        '''
                 }
             }
         }
