@@ -41,11 +41,12 @@ pipeline {
             steps {
                 // Run Terraform apply
                 sh """
-                    cd ${env.TERRAFORM_WORKSPACE}
-                    terraform apply -auto-approve
-                    sudo cp ${env.TERRAFORM_WORKSPACE}/tom-1-key.pem ${env.INSTALL_WORKSPACE}
-                    sudo chown jenkins:jenkins ${env.INSTALL_WORKSPACE}/tom-1-key.pem
-                    sudo chmod 400 ${env.INSTALL_WORKSPACE}/tom-1-key.pem
+                cd ${env.TERRAFORM_WORKSPACE}
+                terraform apply -auto-approve
+                mkdir -p ${env.INSTALL_WORKSPACE}  # Create the directory if it doesn't exist
+                sudo cp ${env.TERRAFORM_WORKSPACE}/tom-1-key.pem ${env.INSTALL_WORKSPACE}/
+                sudo chown jenkins:jenkins ${env.INSTALL_WORKSPACE}/tom-1-key.pem
+                sudo chmod 400 ${env.INSTALL_WORKSPACE}/tom-1-key.pem
                 """
             }
         }
@@ -75,7 +76,7 @@ pipeline {
                 sshagent(['tom-1-key.pem']) {
                     script {
                         sh '''
-                            ansible-playbook -i ./tomcat-Role/tomcat/aws_ec2.yml ./tomcat-Role/tomcat/playbook.yml
+                            ansible-playbook -i ./tomcat_roles/Tomcat/aws_ec2.yml ./tomcat_roles/Tomcat/playbook.yml
                         '''
                     }
                 }
