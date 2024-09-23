@@ -3,7 +3,7 @@ pipeline {
     environment {
         TERRAFORM_WORKSPACE = "/var/lib/jenkins/workspace/tool_deploy/tomcat-infra/"
         INSTALL_WORKSPACE = "/var/lib/jenkins/workspace/tool_deploy/tomcat/"
-        PATH = "/usr/local/bin:${env.PATH}" // Ensure terraform path is added
+        PATH = "/usr/local/bin:${env.PATH}"
     }
     parameters {
         choice(name: 'ACTION', choices: ['apply', 'destroy'], description: 'Select action: apply or destroy')
@@ -13,7 +13,7 @@ pipeline {
             steps {
                 git branch: 'main', url: 'https://github.com/Priyanshu498/Final-tomcat.git'
             }
-        } 
+        }
         stage('Terraform Init') {
             steps {
                 script {
@@ -60,9 +60,9 @@ pipeline {
                         sh """
                             cd ${env.TERRAFORM_WORKSPACE}
                             terraform apply -auto-approve
-                            sudo cp ${env.TERRAFORM_WORKSPACE}/mykey.pem ${env.INSTALL_WORKSPACE}
-                            sudo chown jenkins:jenkins ${env.INSTALL_WORKSPACE}/mykey.pem
-                            sudo chmod 400 ${env.INSTALL_WORKSPACE}/mykey.pem
+                            sudo cp ${env.TERRAFORM_WORKSPACE}/tom-1-key.pem ${env.INSTALL_WORKSPACE}
+                            sudo chown jenkins:jenkins ${env.INSTALL_WORKSPACE}/tom-1-key.pem
+                            sudo chmod 400 ${env.INSTALL_WORKSPACE}/tom-1-key.pem
                         """
                     } catch (Exception e) {
                         error "Terraform Apply failed: ${e}"
@@ -78,12 +78,12 @@ pipeline {
             steps {
                 sshagent(['tom-1-key.pem']) {
                     script {
-                        sh ''' 
-                        ansible-playbook -i ./tomcat-Role/tomcat/aws_ec2.yml ./tomcat-Role/tomcat/playbook.yml
+                        sh '''
+                            ansible-playbook -i ./tomcat-Role/tomcat/aws_ec2.yml ./tomcat-Role/tomcat/playbook.yml
                         '''
+                    }
                 }
             }
-        }
 
         stage('Approval for Destroy') {
             when {
@@ -113,7 +113,6 @@ pipeline {
     post {
         always {
             echo 'Cleaning up temporary files and states...'
-            // Add any cleanup steps here if needed
         }
         success {
             echo 'Succeeded!'
@@ -123,5 +122,3 @@ pipeline {
         }
     }
 }
-
-
