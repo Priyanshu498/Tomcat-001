@@ -20,7 +20,7 @@ variable "private_subnet_cidrs" {
 
 variable "availability_zones" {
   type    = list(string)
-  default = ["eu-west-3a", "eu-west-3b", "eu-west-3c"]
+  default = ["us-east-1a", "us-east-1b"]
 }
 
 # Tags for Resources
@@ -31,7 +31,7 @@ variable "tags" {
 
 # EC2 Instance Configuration
 variable "ami_id" {
-  default = "ami-04a92520784b93e73"
+  default = "ami-0e86e20dae9224db8"
 }
 
 variable "instance_type" {
@@ -43,7 +43,7 @@ variable "subnet_id" {
 }
 
 variable "key_name" {
-  default = "demo-key"
+  default = "tom-1-key"
 }
 
 variable "security_group_name" {
