@@ -15,14 +15,23 @@ pipeline {
         }
         stage('Terraform Init') {
             steps {
-                // Initialize Terraform
-                sh "cd ${env.TERRAFORM_WORKSPACE} && terraform init"
+                script {
+                    // Check if Terraform configuration files exist
+                    if (fileExists("${env.TERRAFORM_WORKSPACE}/*.tf")) {
+                        // Initialize Terraform
+                        sh "cd ${env.TERRAFORM_WORKSPACE} && terraform init"
+                    } else {
+                        error "No Terraform configuration files found in ${env.TERRAFORM_WORKSPACE}. Please check."
+                    }
+                }
             }
         }
         stage('Terraform Plan') {
             steps {
-                // Run Terraform plan
-                sh "cd ${env.TERRAFORM_WORKSPACE} && terraform plan"
+                script {
+                    // Run Terraform plan
+                    sh "cd ${env.TERRAFORM_WORKSPACE} && terraform plan"
+                }
             }
         }
         stage('Approval For Apply') {
