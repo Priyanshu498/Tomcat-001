@@ -8,23 +8,9 @@ pipeline {
         INSTALL_WORKSPACE = "/var/lib/jenkins/workspace/tool_deploy/tomcat/"
     }
     stages {
-        stage('Prepare Workspace') {
-            steps {
-                // Create necessary directories
-                sh "mkdir -p ${env.TERRAFORM_WORKSPACE}"
-                sh "mkdir -p ${env.INSTALL_WORKSPACE}"
-                sh "ls -l ${env.TERRAFORM_WORKSPACE}"
-                sh "ls -l ${env.INSTALL_WORKSPACE}"
-            }
-        }
         stage('Clone Repository') {
             steps {
-                dir("${env.TERRAFORM_WORKSPACE}") {
-                    // Clone the repository into the terraform workspace
-                    git branch: 'main', url: 'https://github.com/Priyanshu498/Final-tomcat.git'
-                }
-                // Verify that files are cloned
-                sh "ls -l ${env.TERRAFORM_WORKSPACE}"
+                git branch: 'main', url: 'https://github.com/Priyanshu498/Final-tomcat.git'
             }
         }
         stage('Terraform Init') {
