@@ -16,13 +16,19 @@ pipeline {
         stage('Terraform Init') {
             steps {
                 // Initialize Terraform
-                sh "cd ${env.TERRAFORM_WORKSPACE} && terraform init"
+                sh """
+                    cd ${TERRAFORM_WORKSPACE}
+                    terraform init
+                """
             }
         }
         stage('Terraform Plan') {
             steps {
                 // Run Terraform plan
-                sh "cd ${env.TERRAFORM_WORKSPACE} && terraform plan"
+                sh """
+                    cd ${TERRAFORM_WORKSPACE}
+                    terraform plan
+                """
             }
         }
         stage('Approval For Apply') {
@@ -31,12 +37,33 @@ pipeline {
             }
             steps {
                 // Prompt for approval before applying changes
-                input "Do you want to apply Terraform changes?"
+                input message: 'Do you want to apply Terraform changes?'
             }
         }
         stage('Terraform Apply') {
             when {
                 expression { params.ACTION == 'apply' }
+            }
+            steps {
+                // Run Terraform apply
+                sh """
+                    cd ${TERRAFORM_WORKSPACE}
+                    terraform apply -auto-approve
+                """
+            }
+        }
+        stage('Approval for Destroy') {
+            when {
+                expression { params.ACTION == 'destroy' }
+            }
+            steps {
+                // Prompt for approval before destroying resources
+                input message: 'Do you want to Terraform Destroy?'
+            }
+        }
+        stage('Terraform Destroy') {
+            when {
+                expression { params.ACTION == 'destroy' }
             }
             steps {
                 // Run Terraform apply
@@ -50,34 +77,16 @@ pipeline {
                 """
             }
         }
-        stage('Approval for Destroy') {
-            when {
-                expression { params.ACTION == 'destroy' }
-            }
-            steps {
-                // Prompt for approval before destroying resources
-                input "Do you want to Terraform Destroy?"
-            }
-        }
-        stage('Terraform Destroy') {
-            when {
-                expression { params.ACTION == 'destroy' }
-            }
-            steps {
-                // Destroy Infra
-                sh "cd ${env.TERRAFORM_WORKSPACE} && terraform destroy -auto-approve"
-            }
-        }
         stage('Tool Deploy') {
             when {
                 expression { params.ACTION == 'apply' }
             }
             steps {
-                sshagent(['tom-1-key.pem']) {
+                sshagent(credentials: ['tomcat']) {
                     script {
-                        sh '''
+                        sh """
                             ansible-playbook -i ./tomcat_roles/Tomcat/aws_ec2.yml ./tomcat_roles/Tomcat/playbook.yml
-                        '''
+                        """
                     }
                 }
             }
@@ -86,11 +95,11 @@ pipeline {
     post {
         success {
             // Actions to take if the pipeline is successful
-            echo 'Succeeded!'
+            echo 'Pipeline Succeeded!'
         }
         failure {
             // Actions to take if the pipeline fails
-            echo 'Failed!'
+            echo 'Pipeline Failed!'
         }
     }
 }
