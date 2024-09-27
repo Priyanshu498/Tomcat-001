@@ -13,6 +13,12 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/Priyanshu498/Final-tomcat.git'
             }
         }
+        stage('Create Terraform Directory') {
+            steps {
+                // Create the directory if it doesn't exist
+                sh "mkdir -p ${env.TERRAFORM_WORKSPACE}"
+            }
+        }
         stage('Terraform Init') {
             steps {
                 // Check the contents of the Terraform workspace
