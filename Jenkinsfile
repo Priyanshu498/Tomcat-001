@@ -15,6 +15,8 @@ pipeline {
         }
         stage('Terraform Init') {
             steps {
+                // Check the contents of the Terraform workspace
+                sh "ls -la ${env.TERRAFORM_WORKSPACE}"
                 // Initialize Terraform
                 sh "cd ${env.TERRAFORM_WORKSPACE} && terraform init"
             }
@@ -44,9 +46,9 @@ pipeline {
                 cd ${env.TERRAFORM_WORKSPACE}
                 terraform apply -auto-approve
                 mkdir -p ${env.INSTALL_WORKSPACE}  # Create the directory if it doesn't exist
-                sudo cp ${env.TERRAFORM_WORKSPACE}/tom-1-key.pem ${env.INSTALL_WORKSPACE}/
-                sudo chown jenkins:jenkins ${env.INSTALL_WORKSPACE}/tom-1-key.pem
-                sudo chmod 400 ${env.INSTALL_WORKSPACE}/tom-1-key.pem
+                cp ${env.TERRAFORM_WORKSPACE}/tom-1-key.pem ${env.INSTALL_WORKSPACE}/
+                chown jenkins:jenkins ${env.INSTALL_WORKSPACE}/tom-1-key.pem
+                chmod 400 ${env.INSTALL_WORKSPACE}/tom-1-key.pem
                 """
             }
         }
