@@ -1,6 +1,6 @@
 # VPC Configuration
 variable "cidr_block" {
-  default = "10.0.0.0/24"
+  default = "10.0.0.0/16"
 }
 
 variable "aws_vpc" {
@@ -10,17 +10,17 @@ variable "aws_vpc" {
 # Subnets Configuration
 variable "public_subnet_cidrs" {
   type    = list(string)
-  default = ["10.0.0.0/25", "10.0.0.128/26"]
+  default = ["10.0.1.0/24", "10.0.2.0/24"]
 }
 
 variable "private_subnet_cidrs" {
   type    = list(string)
-  default = ["10.0.1.0/25", "10.0.1.128/26"]
+  default = ["10.0.3.0/24", "10.0.4.0/24"]
 }
 
 variable "availability_zones" {
   type    = list(string)
-  default = ["us-east-1a", "us-east-1b"]
+  default = ["eu-west-3a", "eu-west-3b", "eu-west-3c"]
 }
 
 # Tags for Resources
@@ -31,7 +31,7 @@ variable "tags" {
 
 # EC2 Instance Configuration
 variable "ami_id" {
-  default = "ami-0a0e5d9c7acc336f1"
+  default = "ami-04a92520784b93e73"
 }
 
 variable "instance_type" {
@@ -43,7 +43,7 @@ variable "subnet_id" {
 }
 
 variable "key_name" {
-  default = "tom-1-key"
+  default = "demo-key"
 }
 
 variable "security_group_name" {
@@ -112,4 +112,3 @@ variable "port" {
 variable "listener_port" {
   default = "80"
 }
-
