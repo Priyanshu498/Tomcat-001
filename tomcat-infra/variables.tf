@@ -1,6 +1,6 @@
 # VPC Configuration
 variable "cidr_block" {
-  default = "10.0.0.0/16"
+  default = "10.0.0.0/23"
 }
 
 variable "aws_vpc" {
@@ -10,12 +10,12 @@ variable "aws_vpc" {
 # Subnets Configuration
 variable "public_subnet_cidrs" {
   type    = list(string)
-  default = ["10.0.1.0/24", "10.0.2.0/24"]
+  default = ["10.0.0.0/25", "10.0.0.128/25"]
 }
 
 variable "private_subnet_cidrs" {
   type    = list(string)
-  default = ["10.0.3.0/24", "10.0.4.0/24"]
+  default = ["10.0.1.0/25", "10.0.1.128/25"]
 }
 
 variable "availability_zones" {
