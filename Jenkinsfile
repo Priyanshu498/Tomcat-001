@@ -1,4 +1,4 @@
-@Library('ecom-cicid-shared-lib@') _
+@Library('cicid-shared-lib@checkov-priyanshu') _
 def cipipeline = new opstree.ci.templates.java_ci.java_ci()
 
 node {
