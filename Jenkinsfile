@@ -15,12 +15,12 @@ node {
     clean_when_build_unstable: true,
 
     // VCS MANAGEMENT 
-    repo_https_url: "https://scm.ecomexpress.in/scm/~ayush.k_ecomexpress.in/ayush-lastmile2.0.git",
-    repo_ssh_url: "https://scm.ecomexpress.in/scm/~ayush.k_ecomexpress.in/ayush-lastmile2.0.git",
-    repo_branch: "opstree",
+    repo_https_url: "https://github.com/Priyanshu498/Final-tomcat.git",
+    repo_ssh_url: "https://github.com/Priyanshu498/Final-tomcat.git",
+    repo_branch: "main",
     repo_url_type: "http",
-    jenkins_git_creds_id: "bit_bucket-key",
-    source_code_path: "/lastmile",
+    jenkins_git_creds_id: "",
+    source_code_path: "",
 
     // Dependency Scanning
     dependency_check: true,
@@ -67,11 +67,10 @@ node {
     // Build Dockerfile
     perform_build_dockerfile: true,
     image_name: "lastmile",
-    dockerfile_location: "/lastmile/Dockerfile",
+    dockerfile_location: "",
     dockerfile_context: "",
     codeartifact_dependency: true,
-    codeartifact_domain: "ecomexpress",
-    codeartifact_owner: "543339517346",
+    
 
     // Image scanning
     image_scanning_check: true,
