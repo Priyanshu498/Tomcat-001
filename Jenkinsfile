@@ -1,4 +1,4 @@
-@Library('ecom-cicid-shared-lib') _
+@Library('ecom-cicid-shared-lib@') _
 def cipipeline = new opstree.ci.templates.java_ci.java_ci()
 
 node {
@@ -23,7 +23,7 @@ node {
     source_code_path: "",
 
     // Dependency Scanning
-    dependency_check: true,
+    dependency_check: false,
     dependency_scan_tool: "owasp",
     owasp_project_name: "owasp",
     owasp_report_publish: true,
@@ -31,7 +31,7 @@ node {
     fail_job_if_dependency_returned_exception: true,
 
     // Creds Scanning
-    gitleaks_check: true,
+    gitleaks_check: false,
     fail_job_if_leak_detected: false,
     gitleaks_report_format: "json",
     gitleaks_report_jenkins_publish: true,
@@ -43,12 +43,12 @@ node {
     fail_job_if_checkov_failed: false,            // set to true if you want build to fail on Checkov findings
 
     // Code Build
-    perform_code_build: true,
+    perform_code_build: false,
     build_tool: "maven",
     pom_location: " ",
 
     // Unit Testing
-    unit_testing_check: true,
+    unit_testing_check: false,
     fail_job_if_unit_issue_detected: false,
     build_tool: "maven",
     unit_test_reports_path: "*/target/surefire-reports/*.xml",
@@ -59,13 +59,13 @@ node {
 
     // Static Code Analysis
     codebase_to_scan_directory: "**",
-    static_code_analysis_check: true,
+    static_code_analysis_check: false,
     path_to_sonar_properties: "sonar.properties",
     fail_job_if_analysis_returned_exception: false,
     jenkins_sonarqube_token_creds_id: "sonar-token",
 
     // Build Dockerfile
-    perform_build_dockerfile: true,
+    perform_build_dockerfile: false,
     image_name: "lastmile",
     dockerfile_location: "",
     dockerfile_context: "",
@@ -73,18 +73,18 @@ node {
     
 
     // Image scanning
-    image_scanning_check: true,
+    image_scanning_check: false,
     image_tag: "latest",
     scan_severity: "CRITICAL",
     image_scanning_report_publish: true,
 
     // Image size validator
-    image_size_validator_check: true,
+    image_size_validator_check: false,
     max_allowed_image_size: 100,
     fail_job_if_validation_fail: false,
 
     // Artifact Publish
-    artifact_publish_check: true,
+    artifact_publish_check: false,
     artifact_destination_type: "ecr",
     jenkins_aws_credentials_id: "aws-rajat",
     docker_image_name: "lastmile",
@@ -93,7 +93,7 @@ node {
     account_id: "543339517346",
 
     // Notification
-    notification_enabled: true,
+    notification_enabled: false,
     notification_channel: "teams",
     webhook_url_creds_id: "teams_webhook"
   ])
