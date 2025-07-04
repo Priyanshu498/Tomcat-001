@@ -19,7 +19,7 @@ node {
     repo_ssh_url: "https://github.com/Priyanshu498/Final-tomcat.git",
     repo_branch: "main",
     repo_url_type: "http",
-    jenkins_git_creds_id: "",
+    jenkins_git_creds_id: "github-priyanshu-498",
     source_code_path: "",
 
     // Dependency Scanning
