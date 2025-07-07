@@ -38,7 +38,7 @@ node {
 
     // ✅ IaC Security Scanning with Checkov
     checkov_check: true,
-    checkov_report_format: "json",                // can be json, sarif, cli, etc.
+    checkov_report_format: "html",                // can be json, sarif, cli, etc.
     checkov_report_jenkins_publish: true,
     fail_job_if_checkov_failed: false,            // set to true if you want build to fail on Checkov findings
 
