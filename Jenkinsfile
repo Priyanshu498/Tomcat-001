@@ -15,8 +15,8 @@ node {
     clean_when_build_unstable: true,
 
     // VCS MANAGEMENT 
-    repo_https_url: "https://github.com/Priyanshu498/Final-tomcat.git",
-    repo_ssh_url: "https://github.com/Priyanshu498/Final-tomcat.git",
+    repo_https_url: "https://github.com/Priyanshu498/Tomcat-001.git",
+    repo_ssh_url: "https://github.com/Priyanshu498/Tomcat-001.git",
     repo_branch: "main",
     repo_url_type: "http",
     jenkins_git_creds_id: "Priyanshu498",
