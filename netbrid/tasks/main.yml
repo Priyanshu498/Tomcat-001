@@ -1,0 +1,5 @@
+---
+- name: Install Docker
+  import_tasks: docker.yml
+- name: Install netbird
+  import_tasks: netbird.yml
